@@ -1,0 +1,4 @@
+import pygame._sdl2
+buttons = ('Yes', 'No')
+answer = pygame._sdl2.messagebox('Title', 'Message', buttons=buttons)
+print(buttons[answer])

@@ -1,0 +1,15 @@
+G G G G G G G G G G G G G G G G G G G G
+G G G G G G G G G G G G G G G G G G G G
+G G G G G G G G G G G G G G G G G G G G
+G G G G G G G G G G G G G G G G G G G G
+G G G G G G G G G G G G G G G G G G G G
+G G G G G G G G G G G G G G G G G G G G
+G G G G G G G G G G G G G G G F G G G G
+G G G G G G G G G G G G G G G G G F G G
+G G G G G G G G G G G G G G F G G G G G
+G G G G G G G G G G G G G G G G G G G G
+G G G G G G G G G G G G G G G G G G G G
+G G G G G G G G G G G G G G G G G G G G
+G G G G G G G G G G G G G G G G G G G G
+16 20 0 4
+0 4 10 13

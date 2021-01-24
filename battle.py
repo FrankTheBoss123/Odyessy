@@ -41,7 +41,7 @@ class BattleMap:
                     block_name = array[x]
                     block_name = block_name.replace("\n", "")
                     map[y].append(blocks[block_name])
-            enemyspawn = file.readline().split(" ")
+            enemyspawn = [int(x) for x in file.readline().split(" ")]
             alliedspawn = [int(x) for x in file.readline().split(" ")]
 
 
@@ -61,7 +61,9 @@ class BattleMap:
 
     def generate_enemies(self,level):
         #stats [name,health,attack,defense,movement]
-        enemyTroop = ["generic infantry",(7,7),2,4,3]
+        enemyTroops = ["generic infantry",(7,7),2,4,3]*(level+3)
+        while len(enemyTroops) != 0:
+
 
 
 class Cursor:

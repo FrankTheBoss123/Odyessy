@@ -35,7 +35,7 @@ class WorldMap:
         clock = pygame.time.Clock()
 
         battle_num = 0
-        with open("map_data/world_map.txt","r") as file:
+        with open("game_data/world_map.txt","r") as file:
             for y in range(Grid_length):
                 map.append([])
                 array = file.readline().split(" ")

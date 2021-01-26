@@ -1,5 +1,6 @@
 import pygame
 import sys
+import random
 
 Map_width = 800
 Map_length = 520
@@ -62,7 +63,15 @@ class BattleMap:
     def generate_enemies(self,level):
         #stats [name,health,attack,defense,movement]
         enemyTroops = ["generic infantry",(7,7),2,4,3]*(level+3)
+        potential_coordinates = []
+        for x in range(enemyspawn[0],enespawn[1]):
+            for y in range(enemyspawn[2],enemyspawn[3]):
+                potential_coordinates.append((x,y))
         while len(enemyTroops) != 0:
+            coordinates = potential_coordinates.pop(random.randint(0,len(potential_coordinates)))
+            enemis[coordinates] = enemyTroops.pop(0)
+
+
 
 
 

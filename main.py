@@ -1,8 +1,10 @@
 import pygame
-import worldmap
+
 import ShopGUI
 import battle
 import battleprep
+import worldmap
+import battle2
 import os
 import sys
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -22,16 +24,25 @@ class Game:
 
         surface = pygame.Surface(screen.get_size())
         surface = surface.convert()
-
-        #GUI = battleprep.BattlePrep(surface,screen)
-        #GUI = ShopGUI.Shop(surface,screen)
-        #GUI = worldmap.WorldMap(surface,screen)
-        GUI = battle.BattleMap(surface,screen,1)
-        user_response = " "
-        while user_response != "":
+        user_response = "worldmap"
+        GUIshop = ShopGUI.Shop(surface,screen)
+        GUIworld = worldmap.WorldMap(surface,screen)
+        GUIprep = battleprep.BattlePrep(surface,screen)
+        GUIbattle1 = battle.BattleMap(surface,screen,0)
+        GUIbattle2 = battle2.BattleMap(surface,screen,1)
+        while True:
             if user_response == "shop":
-                user_response = ShopGUI.Shop()
-            #I can setu more GUI in the future, and go in there using if statements
+                user_response = GUIshop.run()
+            if user_response == "worldmap":
+                user_response = GUIworld.run()
+            if isinstance(user_response,int):
+                chapter = user_response
+                user_response = GUIprep.run()
+                if user_response == "battle":
+                    if chapter == 0:
+                        user_response = GUIbattle1.run()
+                    if chapter == 1:
+                        user_response = GUIbattle2.run()
         pygame.quit()
         sys.exit()
 gui = Game()

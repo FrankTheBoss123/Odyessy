@@ -1,5 +1,6 @@
 import pygame
 import sys
+import popup
 
 Map_width = 800
 Map_length = 520
@@ -17,6 +18,9 @@ blocks = {
     "S":{"name":"shop","passable":True,"color":(193,154,107)}
 }
 
+world_map_file = "game_data/world_map_island.txt"
+#world_map_file = "game_data/world_map_plains.txt"
+
 motion = {
     "up":(0,-1),
     "down":(0,1),
@@ -27,16 +31,36 @@ motion = {
 map = []
 
 battles_index = {}
+shop_index = []
 
 class WorldMap:
     def __init__(self,surface,screen):
         self.screen = screen
         self.surface = surface
-        clock = pygame.time.Clock()
+        self.refresh()
+        self.cursor = Cursor(self.surface,self.screen)
 
+    def run(self):
+        clock = pygame.time.Clock()
+        font = pygame.font.Font('freesansbold.ttf', 32)
+        while True:
+            output = self.cursor.handle_keys()
+            if output is not None:
+                print(output)
+                return output
+            clock.tick(100)
+            drawGrid(self.surface)
+            self.cursor.draw(self.surface)
+            self.screen.blit(self.surface, (0,0))
+            text = font.render("WORLD MAP", 1, (255,0,0))
+            self.screen.blit(text, (550,470))
+            pygame.display.update()
+
+    def refresh(self):
         battle_num = 0
         with open("game_data/world_map.txt","r") as file:
             for y in range(Grid_length):
+                print(y)
                 map.append([])
                 array = file.readline().split(" ")
                 for x in range(len(array)):
@@ -44,26 +68,18 @@ class WorldMap:
                     block_name = block_name.replace("\n", "")
                     map[y].append(blocks[block_name])
                     if block_name == "B":
-                        battles_index[str(x)+","+str(y)] = battle_num
+                        battles_index[(x,y)] = battle_num
                         battle_num += 1
-        file.close()
-
-        drawGrid(surface)
-
-        user_cursor = Cursor()
-
-        while True:
-            output = user_cursor.handle_keys()
-            clock.tick(100)
-            drawGrid(surface)
-            user_cursor.draw(surface)
-            screen.blit(surface, (0,0))
-            pygame.display.update()
+                    if block_name == "S":
+                        shop_index.append((x,y))
+            file.close()
 
 class Cursor:
-    def __init__(self):
+    def __init__(self,surface,screen):
         self.position = (6,6)
         self.color = (255,255,0)
+        self.surface = surface
+        self.screen = screen
 
     def handle_keys(self):
         for user_input in pygame.event.get():
@@ -81,7 +97,18 @@ class Cursor:
                     self.move(motion["right"])
                 #goes in when the user pressed x
                 elif user_input.key == 120:
-                    return self.enter()
+                    if self.position in battles_index:
+                        pop = popup.PopUp("would you like to enter chapter "+str(battles_index[self.position]+1),self.surface,self.screen)
+                        output = pop.run()
+                        if output is not None:
+                            if output:
+                                return battles_index[self.position]
+                    elif self.position in shop_index:
+                        pop = popup.PopUp("would you like to enter the shop",self.surface,self.screen)
+                        output = pop.run()
+                        if output is not None:
+                            if output:
+                                return "shop"
 
     def move(self,direction):
         moved_position = (self.position[0]+direction[0],self.position[1]+direction[1])
@@ -91,10 +118,8 @@ class Cursor:
                 self.position = moved_position
 
     def draw(self,surface):
-        s = pygame.Surface((Grid_size,Grid_size))
-        s.set_alpha(128)
-        s.fill(self.color)
-        surface.blit(s, (self.position[0]*Grid_size, self.position[1]*Grid_size))
+        rect2 = pygame.Rect((self.position[0]*Grid_size, self.position[1]*Grid_size), (Grid_size,Grid_size))
+        pygame.draw.rect(surface, self.color, rect2)
 
     def enter(self):
         if map[self.position[1]][self.position[0]]["name"] == "battle":

@@ -1,31 +1,46 @@
 import pygame
 import sys
+import popup
 
 Map_width = 800
 Map_length = 520
 
 Column_height = 60
+list = ["Wooden Sword","Stone Sword","Healing Potion","Strength Potion","Iron Spear"]
+list2 = ["$15","$30","$20","$40","$60"]
 
 class Shop:
     def __init__(self,surface,screen):
         self.surface = surface
         self.screen = screen
 
+    def run(self):
         clock = pygame.time.Clock()
-        user_cursor = Cursor()
-
+        user_cursor = Cursor(self.surface,self.screen)
+        font = pygame.font.Font('freesansbold.ttf', 32)
         while True:
             output = user_cursor.handle_keys()
+            if output is not None:
+                return output
             clock.tick(100)
-            drawShop(surface)
-            user_cursor.draw(surface)
-            screen.blit(surface, (0,0))
+            drawShop(self.surface)
+            user_cursor.draw(self.surface)
+            self.screen.blit(self.surface, (0,0))
+            for x in range(len(list)):
+                text = font.render(list[x], 1, (0,0,0))
+                self.screen.blit(text, (50,x*60+15))
+                text = font.render(list2[x], 1, (0,0,0))
+                self.screen.blit(text, (600,x*60+15))
+            text = font.render("SHOP MENU", 1, (255,0,0))
+            self.screen.blit(text, (570,440))
             pygame.display.update()
 
 class Cursor:
-    def __init__(self):
+    def __init__(self,surface,screen):
         self.position = 0
         self.color = (255,255,0)
+        self.screen = screen
+        self.surface = surface
 
     def handle_keys(self):
         for user_input in pygame.event.get():
@@ -39,7 +54,16 @@ class Cursor:
                     self.move(1)
                 #goes in when the user pressed x
                 elif user_input.key == 120:
-                    return self.enter()
+                    if self.position < len(list):
+                        pop = popup.PopUp("would you like to buy "+list[self.position],self.surface,self.screen)
+                        output = pop.run()
+
+                elif user_input.key == 122:
+                    pop = popup.PopUp("would you like to leave the shop",self.surface,self.screen)
+                    output = pop.run()
+                    if output is not None:
+                        if output:
+                            return "worldmap"
 
     def move(self,direction):
         print(self.position)

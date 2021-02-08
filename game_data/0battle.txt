@@ -6,10 +6,10 @@ G G G G G G G G G G G G G G G G G G G G
 G G G G G G G G G G G G G G G G G G G G
 G G G G G G G G G G G G G G G F G G G G
 G G G G G G G G G G G G G G G G G F G G
-G G G G G G G G G G G G G G F G W W W W
+G G G G G G G G G G G G G G F G G G G G
 G G G G G G G G G G G G G G G G G G G G
-G G G G G G G G G G G G G G W W W W W W
-G G G G G G G G G G G G W W W W W W W W
-G G G G G G G G G G G G W W W W W W W W
+G G G G G G G G G G G G G G G G G G G G
+G G G G G G G G G G G G G G G G G G G G
+G G G G G G G G G G G G G G G G G G G G
 16 20 0 4
 0 4 10 13

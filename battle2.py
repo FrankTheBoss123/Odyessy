@@ -48,24 +48,6 @@ class BattleMap:
 
         file.close()
 
-    def refresh(self,battlenum):
-        map = []
-        enemies = {}
-        allies = {}
-        with open("game_data/"+str(battlenum)+"battle.txt","r") as file:
-            for y in range(Grid_length):
-                map.append([])
-                array = file.readline().split(" ")
-                for x in range(len(array)):
-                    block_name = array[x]
-                    block_name = block_name.replace("\n", "")
-                    map[y].append(blocks[block_name])
-            enemyspawn = [int(x) for x in file.readline().split(" ")]
-            alliedspawn = [int(x) for x in file.readline().split(" ")]
-        self.generate(battlenum,enemyspawn,alliedspawn)
-
-        file.close()
-
     def run(self):
         clock = pygame.time.Clock()
         font = pygame.font.Font('freesansbold.ttf', 32)
@@ -109,7 +91,7 @@ class BattleMap:
         while len(enemyTroops) != 0:
             coordinates = potential_coordinates.pop(0)
             enemies[coordinates] = enemyTroops.pop(0)
-        alliedTroops = [["generic infantry",(7,7),2,4,3]]*(level+3)
+        alliedTroops = [["generic infantry",(7,7),2,4,3]]*(3)
         potential_coordinates = []
         for x in range(alliedspawn[0],alliedspawn[1]):
             for y in range(alliedspawn[2],alliedspawn[3]):
@@ -128,21 +110,14 @@ class BattleMap:
             pygame.draw.rect(self.surface, (0,0,255), rr)
 
     def generate_path(self,movement,starting):
-        #the queue
         queue = [(starting,movement)]
-        #storing past answers so there's no duplicates
         ans = set()
-        #main loop
         while len(queue) != 0:
-            #removing a value from the queue
             current_val = queue.pop(0)
             current = current_val[0]
-            #if the coordinate has never been seen before add it in
             if current not in ans:
                 ans.add(current)
-            #if the leftover possible movement is bigger than 0, then
             if current_val[1] > 0:
-                #this for loop generates all the possible coordinates that is besides the current coordinates
                 for thing in motion.values():
                     potential_coordinate = (current[0]+thing[0],current[1]+thing[1])
                     if potential_coordinate not in ans and self.possible(potential_coordinate):
